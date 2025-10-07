@@ -1,0 +1,13 @@
+# Ignore everything
+*
+
+# But keep directories so we can re-allow files inside them
+!*/
+
+# Allow C/C++ source and header files and the Makefile
+!*.cpp
+!*.hpp
+!Makefile
+
+# Keep this .gitignore tracked
+!.gitignore
