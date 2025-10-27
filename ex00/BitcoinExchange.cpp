@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:52:17 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/07 11:52:18 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/15 19:05:40 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,17 @@ bool BitcoinExchange::validate_data(const std::string &dateStr) {
     int month = std::atoi(dateStr.substr(5,2).c_str());
     int day = std::atoi(dateStr.substr(8,2).c_str());
 
-    if (month < 1 || month > 12) return false;
+    if (month < 1 || month > 12)
+        return false;
     static const int mdays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
     int maxday = mdays[month - 1];
     if (month == 2) {
         bool leap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
-        if (leap) maxday = 29;
+        if (leap)
+            maxday = 29;
     }
-    if (day < 1 || day > maxday) return false;
+    if (day < 1 || day > maxday)
+        return false;
     return true;
 }
 
@@ -96,17 +99,24 @@ bool BitcoinExchange::isInteger(const std::string &s) {
     if (s.empty()) return false;
     size_t i = 0;
     if (s[0] == '+' || s[0] == '-') i = 1;
-    for (; i < s.size(); ++i) if (!std::isdigit(static_cast<unsigned char>(s[i]))) return false;
+    for (; i < s.size(); ++i)
+    {
+        if (!std::isdigit(static_cast<unsigned char>(s[i])))
+            return false;
+    }
     return true;
 }
 
 bool BitcoinExchange::isNumber(const std::string &s) {
-    if (s.empty()) return false;
+    if (s.empty())
+        return false;
     std::istringstream iss(s);
     double v;
     char c;
-    if (!(iss >> v)) return false;
-    if (iss >> c) return false;
+    if (!(iss >> v))
+        return false;
+    if (iss >> c)
+        return false;
     return true;
 }
 
@@ -114,8 +124,7 @@ void BitcoinExchange::loadInputFile(const std::string &inputPath) {
     inputFile.close();
     inputFile.open(inputPath.c_str());
     if (!inputFile.is_open())
-        throw std::runtime_error("Could not open input file: " + inputPath);
-
+        throw std::runtime_error("Could  not open input file: " + inputPath);
     std::string line;
     if (std::getline(inputFile, line)) {
     }
@@ -143,35 +152,39 @@ void BitcoinExchange::loadInputFile(const std::string &inputPath) {
     const std::string spaces = " \t\n\r";
     size_t start = date.find_first_not_of(spaces);
     size_t end = date.find_last_not_of(spaces);
-    if (start == std::string::npos) date = std::string();
-    else date = date.substr(start, end - start + 1);
+    if (start == std::string::npos)
+        date = std::string();
+    else
+        date = date.substr(start, end - start + 1);
     size_t start2 = valStr.find_first_not_of(spaces);
     size_t end2 = valStr.find_last_not_of(spaces);
-    if (start2 == std::string::npos) valStr = std::string();
-    else valStr = valStr.substr(start2, end2 - start2 + 1);
+    if (start2 == std::string::npos)
+        valStr = std::string();
+    else 
+        valStr = valStr.substr(start2, end2 - start2 + 1);
 
-        if (!validate_data(date) || !isNumber(valStr)) {
-            q.status = 1;
-            q.raw = line;
-            queryDates.push_back(q);
-            continue;
-        }
-        double value = static_cast<double>(std::atof(valStr.c_str()));
-        q.date = date;
-        q.value = value;
-        if (value > static_cast<double>(INT_MAX) || value < static_cast<double>(INT_MIN)) {
-            q.status = 3;
-        } else if (value < 0.0) {
-            q.status = 2;
-        } else if (value == 0.0) {
-        }
+    if (!validate_data(date) || !isNumber(valStr))
+    {
+        q.status = 1;
+        q.raw = line;
         queryDates.push_back(q);
+        continue;
+    }
+    double value = static_cast<double>(std::atof(valStr.c_str()));
+    q.date = date;
+    q.value = value;
+    if (value > static_cast<double>(INT_MAX) || value < static_cast<double>(INT_MIN)) 
+        q.status = 3;
+    else if (value < 0.0)
+        q.status = 2;
+    queryDates.push_back(q);
     }
 }
 
 float BitcoinExchange::getRateForDate(const std::string &date) const {
     std::map<std::string, float>::const_iterator it = exchangeRates.find(date);
-    if (it != exchangeRates.end()) return it->second;
+    if (it != exchangeRates.end()) 
+        return it->second;
     std::map<std::string, float>::const_iterator lb = exchangeRates.lower_bound(date);
     if (lb == exchangeRates.begin()) {
         throw std::out_of_range("No earlier rate available for date: " + date);

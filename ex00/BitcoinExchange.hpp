@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:52:23 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/07 12:05:32 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/15 19:04:10 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ private:
     void parseLine(const std::string &line);
     void loadData();
     static bool validate_data(const std::string &dateStr);
-    // Find exchange rate for date or the closest previous date
     float getRateForDate(const std::string &date) const;
 };
 
