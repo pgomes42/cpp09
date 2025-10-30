@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:52:17 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/15 19:05:40 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/30 14:48:15 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,22 @@ BitcoinExchange::BitcoinExchange(const std::string &inputPath) {
     loadInputFile(inputPath);
 }
 BitcoinExchange::~BitcoinExchange() {}
+
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &other)
+    : exchangeRates(other.exchangeRates), queryDates(other.queryDates)
+{
+    
+}
+
+BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &other)
+{
+    if (this != &other)
+    {
+        exchangeRates = other.exchangeRates;
+        queryDates = other.queryDates;
+    }
+    return *this;
+}
 
 void BitcoinExchange::loadData() {
     std::string line;

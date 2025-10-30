@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 21:36:12 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/30 11:34:54 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/30 12:00:44 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,27 @@
 
 PmergeMe:: PmergeMe(){}
 PmergeMe:: ~PmergeMe(){}
+
+PmergeMe::PmergeMe(const PmergeMe &other)
+    : conteiner_vector(other.conteiner_vector), conteiner_deque(other.conteiner_deque),
+      time_to_load_vector(other.time_to_load_vector), time_to_load_deque(other.time_to_load_deque),
+      time_to_vector_sort(other.time_to_vector_sort), time_to_deque_sort(other.time_to_deque_sort)
+{
+}
+
+PmergeMe &PmergeMe::operator=(const PmergeMe &other)
+{
+    if (this != &other)
+    {
+        conteiner_vector = other.conteiner_vector;
+        conteiner_deque = other.conteiner_deque;
+        time_to_load_vector = other.time_to_load_vector;
+        time_to_load_deque = other.time_to_load_deque;
+        time_to_vector_sort = other.time_to_vector_sort;
+        time_to_deque_sort = other.time_to_deque_sort;
+    }
+    return *this;
+}
 
 PmergeMe:: PmergeMe(char **argv, int &size)
 {

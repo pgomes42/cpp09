@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 20:32:40 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/30 11:46:42 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/30 11:55:28 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ class PmergeMe
 {
     public:
         PmergeMe(char **argv, int &size);
+        PmergeMe(const PmergeMe &other);
+        PmergeMe &operator=(const PmergeMe &other);
         ~PmergeMe();
         void sort_vector(void);
         void sort_deque(void);

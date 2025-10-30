@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 21:38:16 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/30 11:38:25 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/30 11:55:28 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ class RPN
         std::string expr;
     public:
         RPN(const std::string & argv);
+        RPN(const RPN &other);
+        RPN &operator=(const RPN &other);
         int evaluateRPN();
         ~RPN();
 };

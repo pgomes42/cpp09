@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:52:23 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/15 19:04:10 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/30 11:55:28 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ class BitcoinExchange {
 public:
     BitcoinExchange();
     BitcoinExchange(const std::string &inputPath);
+    BitcoinExchange(const BitcoinExchange &other);
+    BitcoinExchange &operator=(const BitcoinExchange &other);
     ~BitcoinExchange();
     
     float getExchangeRate(const std::string &date) const;

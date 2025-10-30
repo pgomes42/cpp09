@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 21:59:33 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/30 11:41:02 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/30 11:55:28 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@ RPN::RPN(){}
 RPN::~RPN(){}
 
 RPN::RPN(const std::string& exp): expr(exp){}
+
+RPN::RPN(const RPN &other) : expr(other.expr) {}
+
+RPN &RPN::operator=(const RPN &other)
+{
+    if (this != &other)
+        expr = other.expr;
+    return *this;
+}
 
 int RPN::evaluateRPN() {
     std::stack<int> st;
