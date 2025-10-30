@@ -5,19 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
 /*   Created: 2025/10/25 20:32:40 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/27 00:29:50 by pgomes           ###   ########.fr       */
-=======
-/*   Created: 2025/10/07 14:42:57 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/07 14:59:32 by pgomes           ###   ########.fr       */
->>>>>>> 07f8fcf272463d5698ac3136afea03d37c32d9ee
+/*   Updated: 2025/10/30 11:46:42 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PMERGEME_HPP
-<<<<<<< HEAD
-#define PMERGERME_HPP
+#define PMERGEME_HPP
 
 #include <string>
 #include <iostream>
@@ -61,30 +55,3 @@ class PmergeMe
 };
 
 #endif
-=======
-#define PMERGEME_HPP   
-
-#include <iostream>
-#include <list>
-#include <sstream>
-#include <string>
-#include <limits>
-
-
-class PmergeMe
-{
-private:
-    std::list<unsigned int> _list;
-    void _sortList();
-    void _printList();
-    void _my_time();
-    void _he_time();
-    void load_list_from_array(int argc, char **argv);
-
-public:
-    PmergeMe(int argc, char **argv);
-    ~PmergeMe();
-
-};
-#endif 
->>>>>>> 07f8fcf272463d5698ac3136afea03d37c32d9ee
