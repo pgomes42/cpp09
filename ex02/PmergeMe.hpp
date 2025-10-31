@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 20:32:40 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/30 11:55:28 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/31 10:00:03 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,11 @@ class PmergeMe
         
     private:
         PmergeMe();
-        void merge_Insertion_v(std::vector<int> & list);
-        void insertion_v (std::vector<int> &list, int val);
-        void merge_Insertion_d(std::deque<int> & list);
-        void insertion_d (std::deque<int> &list, int val);
+    
+    template <typename Container>
+    void mergeInsertion(Container &list);
+    template <typename Container>
+    void insertion(Container &list, typename Container::value_type val);
         std::vector<int> conteiner_vector;
         std::deque<int> conteiner_deque;
         double time_to_load_vector;
@@ -57,3 +58,34 @@ class PmergeMe
 };
 
 #endif
+
+template <typename Container>
+void PmergeMe::insertion(Container &list, typename Container::value_type val)
+{
+    typename Container::iterator pos = std::lower_bound(list.begin(), list.end(), val);
+    list.insert(pos, val);
+}
+
+template <typename Container>
+void PmergeMe::mergeInsertion(Container & list)
+{
+    if (list.size() <= 1)
+        return ;
+    Container M, S;
+
+    for (size_t i= 0; i + 1 < list.size(); i += 2 )
+    {
+        typename Container::value_type a = list[i];
+        typename Container::value_type b = list[i + 1];
+        if (a > b)
+            std::swap(a, b);
+        S.push_back(a);
+        M.push_back(b);
+    }
+    if (list.size() % 2 != 0 )
+        M.push_back(list.back());
+    mergeInsertion(M);
+    for(size_t i = 0; i < S.size(); i++)
+        insertion(M, S[i]);
+    list = M;
+}
