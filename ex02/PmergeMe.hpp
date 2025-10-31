@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 20:32:40 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/31 10:00:03 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/31 10:40:38 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@
 #include <sstream>
 #include <ctime>
 #include <cstdlib>
+#include <cctype>
 #include <iomanip>
 #include <deque>
-#include <algorithm> 
+#include <algorithm>
+#include <sys/time.h>
 
 class PmergeMe
 {
@@ -30,35 +32,38 @@ class PmergeMe
         PmergeMe(const PmergeMe &other);
         PmergeMe &operator=(const PmergeMe &other);
         ~PmergeMe();
+
         void sort_vector(void);
         void sort_deque(void);
         void print_sorted_list(const std::vector<int> &list);
         std::vector<int> getConteiner_vector(void);
         double getTime_to_sort_vector();
         double getTime_to_sort_deque();
+
         void load_conteiner_deque(char **argv, int & size);
         void load_conteiner_vector(char **argv, int & size);
-       
-        
-        
+
     private:
         PmergeMe();
-    
+        void sleepInConstructor();
+        template <typename Container>
+        void mergeInsertion(Container &list);
+        template <typename Container>
+        void insertion(Container &list, typename Container::value_type val);
+
+        // generic loader: container pointer, argv, size and reference to time field
     template <typename Container>
-    void mergeInsertion(Container &list);
-    template <typename Container>
-    void insertion(Container &list, typename Container::value_type val);
+    void load_conteiner_generic(Container *container, char **argv, int & size, double &time_field);
+
         std::vector<int> conteiner_vector;
         std::deque<int> conteiner_deque;
         double time_to_load_vector;
         double time_to_load_deque;
         double time_to_vector_sort;
         double time_to_deque_sort;
-
 };
 
-#endif
-
+// Template implementations must be in the header
 template <typename Container>
 void PmergeMe::insertion(Container &list, typename Container::value_type val)
 {
@@ -89,3 +94,26 @@ void PmergeMe::mergeInsertion(Container & list)
         insertion(M, S[i]);
     list = M;
 }
+
+template <typename Container>
+void PmergeMe::load_conteiner_generic(Container *container, char **argv, int & size, double &time_field)
+{
+    struct timeval tv_start, tv_end;
+    gettimeofday(&tv_start, NULL);
+    typename Container::value_type number;
+    // optional sleep (kept for backward compatibility)
+    sleepInConstructor();
+    int i = -1;
+    while (++i < size - 1)
+    {
+         if (!std::isdigit(static_cast<unsigned char>(argv[i][0])) && argv[i][0] != '+')
+             throw std::runtime_error(std::string("Error\nNumber invalid: ") + argv[i]);
+        number = static_cast<typename Container::value_type>(std::atoi(argv[i]));
+        container->push_back(number);
+    }
+    gettimeofday(&tv_end, NULL);
+    time_field = static_cast<double>(tv_end.tv_sec - tv_start.tv_sec) +
+                 static_cast<double>(tv_end.tv_usec - tv_start.tv_usec) / 1e6;
+}
+
+#endif
