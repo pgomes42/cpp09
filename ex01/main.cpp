@@ -17,13 +17,9 @@ int main(int ac, char *argv[]) {
     std::string expr = argv[1];
     try {
         RPN test(expr);
-        int result = test.evaluateRPN();
-
-        std::cout << "Expressão: " << expr << "\n";
-        std::cout << "Resultado: " << result << "\n";
+        std::cout << test.evaluateRPN() << "\n";
     } catch (const std::exception& e) {
         std::cerr << e.what() << "\n";
-
     }
     return 0;
 }

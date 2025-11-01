@@ -6,10 +6,9 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 21:36:12 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/30 12:00:44 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/11/01 14:46:44 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "PmergeMe.hpp"
 
@@ -33,6 +32,7 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &other)
         time_to_load_deque = other.time_to_load_deque;
         time_to_vector_sort = other.time_to_vector_sort;
         time_to_deque_sort = other.time_to_deque_sort;
+        
     }
     return *this;
 }
@@ -51,7 +51,7 @@ PmergeMe:: PmergeMe(char **argv, int &size)
     while (++i < size - 1)
     {
          if (!isdigit(argv[i][0]) && argv[i][0] != '+')
-           throw std::runtime_error("Error\nNumber invalid: " +(std::string)argv[i]);
+           throw std::runtime_error("Error\nNumber invalid: " + (std::string)argv[i]);
         number = std::atoi(argv[i]);
         conteiner_deque.push_back(number);      
     }

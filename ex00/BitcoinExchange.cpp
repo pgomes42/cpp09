@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:52:17 by pgomes            #+#    #+#             */
-/*   Updated: 2025/10/30 14:48:15 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/11/01 15:10:38 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,11 +145,11 @@ void BitcoinExchange::loadInputFile(const std::string &inputPath) {
     if (std::getline(inputFile, line)) {
     }
     while (std::getline(inputFile, line)) {
-        Query q;
-        q.raw = line;
-        q.date = "";
-        q.value = 0.0;
-        q.status = 0;
+        Query query;
+        query.raw = line;
+        query.date = "";
+        query.value = 0.0;
+        query.status = 0;
         std::string date;
         std::string valStr;
         size_t sep = line.find('|');
@@ -159,9 +159,9 @@ void BitcoinExchange::loadInputFile(const std::string &inputPath) {
         } else {
             std::istringstream ss(line);
             if (!std::getline(ss, date, ',') || !std::getline(ss, valStr)) {
-                q.status = 1;
-                q.raw = line;
-                queryDates.push_back(q);
+                query.status = 1;
+                query.raw = line;
+                queryDates.push_back(query);
                 continue;
             }
         }
@@ -181,19 +181,19 @@ void BitcoinExchange::loadInputFile(const std::string &inputPath) {
 
     if (!validate_data(date) || !isNumber(valStr))
     {
-        q.status = 1;
-        q.raw = line;
-        queryDates.push_back(q);
+        query.status = 1;
+        query.raw = line;
+        queryDates.push_back(query);
         continue;
     }
     double value = static_cast<double>(std::atof(valStr.c_str()));
-    q.date = date;
-    q.value = value;
+    query.date = date;
+    query.value = value;
     if (value > static_cast<double>(INT_MAX) || value < static_cast<double>(INT_MIN)) 
-        q.status = 3;
+        query.status = 3;
     else if (value < 0.0)
-        q.status = 2;
-    queryDates.push_back(q);
+        query.status = 2;
+    queryDates.push_back(query);
     }
 }
 
@@ -210,7 +210,7 @@ float BitcoinExchange::getRateForDate(const std::string &date) const {
 }
 
 void BitcoinExchange::processQueries() const {
-    for (std::vector<Query>::const_iterator it = queryDates.begin(); it != queryDates.end(); ++it) {
+    for (std::list<Query>::const_iterator it = queryDates.begin(); it != queryDates.end(); ++it) {
         const Query &q = *it;
         if (q.status == 1) {
             std::cerr << "Error: bad input => " << q.raw << '\n';
