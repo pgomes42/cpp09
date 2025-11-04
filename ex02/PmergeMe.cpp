@@ -6,11 +6,12 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 21:36:12 by pgomes            #+#    #+#             */
-/*   Updated: 2025/11/01 14:46:44 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/10/31 14:36:04 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
+#include <unistd.h>
 
 PmergeMe:: PmergeMe(){}
 PmergeMe:: ~PmergeMe(){}
@@ -42,56 +43,37 @@ PmergeMe:: PmergeMe(char **argv, int &size)
     load_conteiner_deque(argv, size);
     load_conteiner_vector(argv, size);
 }
- void PmergeMe:: load_conteiner_deque(char **argv, int & size)
- {
-    std::clock_t time_start = std::clock();
-    int number;
 
-    int i = -1;
-    while (++i < size - 1)
-    {
-         if (!isdigit(argv[i][0]) && argv[i][0] != '+')
-           throw std::runtime_error("Error\nNumber invalid: " + (std::string)argv[i]);
-        number = std::atoi(argv[i]);
-        conteiner_deque.push_back(number);      
-    }
-    std::clock_t time_end = std::clock();
-    time_to_load_deque =  static_cast<double>(time_end - time_start);
- }
+void PmergeMe:: load_conteiner_deque(char **argv, int & size)
+ {
+    load_conteiner_generic<std::deque<int> >(&conteiner_deque, argv, size, time_to_load_deque);
+}
 
 void PmergeMe:: load_conteiner_vector(char **argv, int & size)
  {
-    std::clock_t time_start = std::clock();
-    int number;
-
-    int i = -1;
-    while (++i < size - 1)
-    {
-         if (!isdigit(argv[i][0]) && argv[i][0] != '+')
-           throw std::runtime_error("Error\nNumber invalid: " +(std::string)argv[i]);
-        number = std::atoi(argv[i]);
-        conteiner_vector.push_back(number);      
-    }
-    std::clock_t time_end = std::clock();
-    time_to_load_vector =  static_cast<double>(time_end - time_start);
+     load_conteiner_generic<std::vector<int> >(&conteiner_vector, argv, size, time_to_load_vector);
  }
 
  void PmergeMe::sort_vector(void)
 {
-    std::clock_t time_start = std::clock();
-    merge_Insertion_v(conteiner_vector);
-     std::clock_t time_end = std::clock();
-    time_to_vector_sort = time_to_load_vector +
-    (static_cast<double>(time_end - time_start));
+    struct timeval tv_start, tv_end;
+    gettimeofday(&tv_start, NULL);
+    mergeInsertion(conteiner_vector);
+    gettimeofday(&tv_end, NULL);
+    double dur = static_cast<double>(tv_end.tv_sec - tv_start.tv_sec) +
+                 static_cast<double>(tv_end.tv_usec - tv_start.tv_usec) / 1e6;
+    time_to_vector_sort = time_to_load_vector + dur;
 }
 
 void PmergeMe::sort_deque(void)
 {
-    std::clock_t time_start = std::clock();  
-    merge_Insertion_d(conteiner_deque);
-    std::clock_t time_end = std::clock();
-    time_to_deque_sort = time_to_load_deque +
-    (static_cast<double>(time_end - time_start));
+    struct timeval tv_start, tv_end;
+    gettimeofday(&tv_start, NULL);
+    mergeInsertion(conteiner_deque);
+    gettimeofday(&tv_end, NULL);
+    double dur = static_cast<double>(tv_end.tv_sec - tv_start.tv_sec) +
+                 static_cast<double>(tv_end.tv_usec - tv_start.tv_usec) / 1e6;
+    time_to_deque_sort = time_to_load_deque + dur;
 }
 
 void PmergeMe:: print_sorted_list(const std::vector<int> &list)
@@ -115,60 +97,4 @@ std::vector<int>PmergeMe:: getConteiner_vector(void)
 {
     return (conteiner_vector);
 }
-void PmergeMe:: insertion_v (std::vector<int> &list, int val)
-{
-    std::vector<int>::iterator pos = std::lower_bound(list.begin(), list.end(), val);
-    list.insert(pos, val);
-    
-}
 
-void PmergeMe:: merge_Insertion_v(std::vector<int> & list)
-{
-    if (list.size() <= 1)
-        return ;
-    std::vector<int> M, S;
-
-    for (size_t i= 0; i + 1 < list.size(); i += 2 )
-    {
-        int a = list[i];
-        int b = list[i + 1];
-        if (a > b)
-            std::swap(a, b);
-        S.push_back(a);
-        M.push_back(b);
-    }
-    if (list.size() % 2 != 0 )
-        M.push_back(list.back());
-    merge_Insertion_v(M);
-    for(size_t i = 0; i < S.size(); i++)
-        insertion_v(M, S[i]);
-    list = M;
-}
-void PmergeMe:: insertion_d (std::deque<int> &list, int val)
-{
-    std::deque<int>::iterator pos = std::lower_bound(list.begin(), list.end(), val);
-     list.insert(pos, val);
-}
-
-void PmergeMe:: merge_Insertion_d(std::deque<int> & list)
-{
-    if (list.size() <= 1)
-        return ;
-    std::deque<int> M, S;
-
-    for (size_t i= 0; i + 1 < list.size(); i += 2 )
-    {
-        int a = list[i];
-        int b = list[i + 1];
-        if (a > b)
-            std::swap(a, b);
-        S.push_back(a);
-        M.push_back(b);
-    }
-    if (list.size() % 2 != 0 )
-        M.push_back(list.back());
-    merge_Insertion_d(M);
-    for(size_t i = 0; i < S.size(); i++)
-        insertion_d(M, S[i]);
-    list = M;
-}
