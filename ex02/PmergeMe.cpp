@@ -6,7 +6,7 @@
 /*   By: pgomes <pgomes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 21:36:12 by pgomes            #+#    #+#             */
-/*   Updated: 2025/11/01 14:46:44 by pgomes           ###   ########.fr       */
+/*   Updated: 2025/11/04 11:44:08 by pgomes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ void PmergeMe:: merge_Insertion_v(std::vector<int> & list)
     merge_Insertion_v(M);
     for(size_t i = 0; i < S.size(); i++)
         insertion_v(M, S[i]);
+        
     list = M;
 }
 void PmergeMe:: insertion_d (std::deque<int> &list, int val)

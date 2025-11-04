@@ -26,6 +26,7 @@ int main(int ac, char *argv[])
             std::cout << argv[i] << " ";
         std::cout << std::endl;
         test.sort_vector();
+        
         test.sort_deque();
         test.print_sorted_list(test.getConteiner_vector());
         std::cout << "Time to process a reange of  " <<( ac - 1 )
